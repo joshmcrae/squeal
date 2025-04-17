@@ -14,6 +14,20 @@ class Database
     readonly private PDO $conn;
 
     /**
+     * Whether to log queries.
+     *
+     * @var bool
+     */
+    public bool $logQueries = false;
+
+    /**
+     * Logged SQL queries.
+     *
+     * @var string[]
+     */
+    public array $log;
+
+    /**
      * Creates a new database object from a file.
      *
      * @param string $path
@@ -42,6 +56,7 @@ class Database
     public function __construct(string $dsn)
     {
         $this->conn = new PDO(sprintf('sqlite:%s', $dsn));
+        $this->log = [];
     }
 
     /**
@@ -51,9 +66,15 @@ class Database
      */
     public function exec(string $sql, array $params = []): Result
     {
+        $sql = $this->renderFragments($sql, $params);
+
+        if ($this->logQueries) {
+            $this->log[] = $sql;
+        }
+
         $statement = $this
             ->conn
-            ->prepare($this->renderFragments($sql, $params));
+            ->prepare($sql);
 
         $statement->execute($params);
 
@@ -97,6 +118,17 @@ class Database
             $rendered .= $fragment;
         }
 
-        return $rendered;
+        return trim($rendered);
+    }
+
+    /**
+     * Starts a query builder for a table.
+     *
+     * @param string $table
+     * @return Builder
+     */
+    public function table(string $table): Builder
+    {
+        return new Builder($this, $table);
     }
 }
