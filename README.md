@@ -48,8 +48,8 @@ $db->exec('
     select  *
     from    users 
     where   active = 1
-            [[and type < :type']]
-            [[and created_at < :hour_ago']]
+            [[and type < :type]]
+            [[and created_at < :hour_ago]]
 ', [
     'hour_ago' => time() - 3600
 ]);
