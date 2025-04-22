@@ -40,7 +40,7 @@ class Result
     {
         return $this
             ->statement
-            ->fetch();
+            ->fetch() ?: null;
     }
 
     /**
