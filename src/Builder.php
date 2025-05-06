@@ -34,7 +34,7 @@ class Builder
      * Adds a WHERE clause to the query.
      *
      * @param string $column
-     * @param mixed $eq
+     * @param mixed ...$args
      * @return $this
      */
     public function where(string $column, ...$args): self
@@ -112,6 +112,54 @@ class Builder
     }
 
     /**
+     * Executes a callable within which all new conditions
+     * apply in a boolean AND expression.
+     *
+     * @param callable $fn
+     * @return self
+     */
+    public function and(callable $fn)
+    {
+        $where = $this->where;
+        $this->where = [];
+
+        $fn($this);
+
+        if (!empty($this->where)) {
+            $conditions = implode(' and ', $this->where);
+
+            $this->where = $where;
+            $this->where[] = empty($where) ? $conditions : sprintf('(%s)', $conditions);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Executes a callable within which all new conditions
+     * apply in a boolean OR expression.
+     *
+     * @param callable $fn
+     * @return self
+     */
+    public function or(callable $fn)
+    {
+        $where = $this->where;
+        $this->where = [];
+
+        $fn($this);
+
+        if (!empty($this->where)) {
+            $conditions = implode(' or ', $this->where);
+
+            $this->where = $where;
+            $this->where[] = empty($where) ? $conditions : sprintf('(%s)', $conditions);
+        }
+
+        return $this;
+    }
+
+    /**
      * Executes a select query.
      *
      * @return Result
@@ -171,7 +219,7 @@ class Builder
         $where = '';
 
         if (!empty($this->where)) {
-            $where = ' where ' . implode(' and ', $this->where);
+            $where = ' where ' . implode('and ', $this->where);
         }
 
         if (empty($values)) {
@@ -205,7 +253,7 @@ class Builder
         $where = '';
 
         if (!empty($this->where)) {
-            $where = ' where ' . implode(' and ', $this->where);
+            $where = ' where ' . implode('and ', $this->where);
         }
 
         $sql = sprintf(

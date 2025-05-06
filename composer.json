@@ -8,6 +8,9 @@
             "Squeal\\": "src/"
         }
     },
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    },
     "require": {
         "php": "^8.4"
     },

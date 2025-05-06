@@ -48,7 +48,7 @@ $db->exec('
     select  *
     from    users 
     where   active = 1
-            [[and type < :type]]
+            [[and type = :type]]
             [[and created_at < :hour_ago]]
 ', [
     'hour_ago' => time() - 3600
@@ -69,7 +69,7 @@ $results->one();
 // Fetch remaining records
 $results->all();
 
-// Map remaining results through transformer function
+// Map remaining records through transformer function
 $users = $results->map(fn (array $row) => new User($row['id'], $row['email'], $row['name']));
 ```
 

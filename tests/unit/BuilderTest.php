@@ -32,6 +32,23 @@ class BuilderTest extends TestCase
         $this->assertEquals('select email, name from users where email = ?', $this->db->log[0]);
     }
 
+    public function testBooleanExpressions()
+    {
+        $b = new Builder($this->db, 'users');
+
+        $b
+            ->or(fn (Builder $db) => $db
+                ->where('email', eq: 'john.doe@example.com')
+                ->and(fn (Builder $db) => $db
+                    ->where('name', eq: 'John Doe')
+                    ->where('id', gte: 3)
+                )
+            )
+            ->select(['id']);
+
+        $this->assertEquals('select id from users where email = ? or (name = ? and id >= ?)', $this->db->log[0]);
+    }
+
     public function testInsert()
     {
         $b = new Builder($this->db, 'users');
