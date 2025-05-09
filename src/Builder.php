@@ -130,6 +130,8 @@ class Builder
 
             $this->where = $where;
             $this->where[] = empty($where) ? $conditions : sprintf('(%s)', $conditions);
+        } else {
+            $this->where = $where;
         }
 
         return $this;
@@ -154,6 +156,8 @@ class Builder
 
             $this->where = $where;
             $this->where[] = empty($where) ? $conditions : sprintf('(%s)', $conditions);
+        } else {
+            $this->where = $where;
         }
 
         return $this;
