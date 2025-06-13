@@ -131,4 +131,20 @@ class Database
     {
         return new Builder($this, $table);
     }
+
+    /**
+     * Returns a directory of executable queries.
+     *
+     * @param string $path
+     * @param string $extension
+     * @return Directory
+     */
+    public function directory(string $path, string $extension = '.sql')
+    {
+        return new Directory(
+            $this,
+            $path,
+            $extension
+        );
+    }
 }

@@ -59,4 +59,12 @@ class DatabaseTest extends TestCase
 
         $this->assertInstanceOf(Builder::class, $result);
     }
+
+    public function testDirectory()
+    {
+        $db = Database::inMemory();
+        $dir = $db->directory(__DIR__ . '/../fixtures/');
+
+        $this->assertInstanceOf(Directory::class, $dir);
+    }
 }
