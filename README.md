@@ -108,3 +108,20 @@ $db
     ->where('active', eq: 0)
     ->delete();
 ```
+
+Query directories:
+
+```php
+$dir = $db->directory('reports', '.sql');
+
+// List available queries by name
+$queries = $dir->list();
+
+// Execute a query by name
+$result = $dir->exec('outstanding_orders', [':as_of' => time()]);
+
+// Use the directory for migrations
+$migrated = $dir
+    ->asMigrations() // automatically tracks versions
+    ->up(); // applies only pending versions
+```

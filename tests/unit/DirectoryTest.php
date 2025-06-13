@@ -43,4 +43,24 @@ class DirectoryTest extends TestCase
             $this->db->log[0]
         );
     }
+
+    public function testAsMigrations()
+    {
+        $all = $this
+            ->dir
+            ->asMigrations('migrations')
+            ->up();
+
+        $empty = $this->dir->up();
+
+        $this->assertEquals(
+            [
+                '01_create_users_table',
+                '02_create_cache_table'
+            ],
+            $all
+        );
+
+        $this->assertEmpty($empty);
+    }
 }
