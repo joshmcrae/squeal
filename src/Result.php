@@ -12,7 +12,7 @@ class Result
      *
      * @param PDOStatement $statement
      */
-    public function __construct(readonly private PDOStatement $statement)
+    public function __construct(readonly private PDOStatement $statement, readonly public string $lastInsertId)
     {
         $this
             ->statement

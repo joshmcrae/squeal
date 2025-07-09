@@ -52,6 +52,18 @@ class DatabaseTest extends TestCase
         $this->assertEmpty($result->all());
     }
 
+    public function testLastInsertId()
+    {
+        $db = Database::inMemory();
+        $db->exec('create table users (id integer primary key autoincrement, name text)');
+
+        $result[] = $db->exec('insert into users (name) values (?)', ['John Doe']);
+        $result[] = $db->exec('insert into users (name) values (?)', ['Jane Doe']);
+
+        $this->assertEquals(1, $result[0]->lastInsertId);
+        $this->assertEquals(2, $result[1]->lastInsertId);
+    }
+
     public function testTable()
     {
         $db = Database::inMemory();

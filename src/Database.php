@@ -78,7 +78,7 @@ class Database
 
         $statement->execute($params);
 
-        return new Result($statement);
+        return new Result($statement, $this->conn->lastInsertId());
     }
 
     /**
