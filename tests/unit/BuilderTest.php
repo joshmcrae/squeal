@@ -49,6 +49,18 @@ class BuilderTest extends TestCase
         $this->assertEquals('select id from users where email = ? or (name = ? and id >= ?)', $this->db->log[0]);
     }
 
+    public function testOrderBy()
+    {
+        $b = new Builder($this->db, 'users');
+
+        $b
+            ->orderBy('id', 'desc')
+            ->orderBy('name', 'asc')
+            ->select(['id']);
+
+        $this->assertEquals('select id from users order by id desc, name asc', $this->db->log[0]);
+    }
+
     public function testInsert()
     {
         $b = new Builder($this->db, 'users');

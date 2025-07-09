@@ -14,6 +14,13 @@ class Builder
     private array $where = [];
 
     /**
+     * Query ORDER BY clauses.
+     * 
+     * @var array
+     */
+    private array $orderBy = [];
+
+    /**
      * Bound parameters.
      *
      * @var mixed[]
@@ -163,6 +170,13 @@ class Builder
         return $this;
     }
 
+    public function orderBy(string $column, string $direction = 'asc'): self
+    {
+        $this->orderBy[] = sprintf('%s %s', $column, $direction);
+
+        return $this;
+    }
+
     /**
      * Executes a select query.
      *
@@ -171,16 +185,22 @@ class Builder
     public function select(array $columns = ['*']): Result
     {
         $where = '';
+        $orderBy = '';
 
         if (!empty($this->where)) {
             $where = ' where ' . implode(' and ', $this->where);
         }
 
+        if (!empty($this->orderBy)) {
+            $orderBy = ' order by ' . implode(', ', $this->orderBy);
+        }
+
         $sql = sprintf(
-            'select %s from %s%s',
+            'select %s from %s%s%s',
             implode(', ', $columns),
             $this->table,
-            $where
+            $where,
+            $orderBy
         );
 
         return $this
