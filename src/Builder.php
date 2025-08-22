@@ -170,6 +170,13 @@ class Builder
         return $this;
     }
 
+    /**
+     * Adds an ORDER BY clause to the query.
+     *
+     * @param string $column
+     * @param string $direction
+     * @return self
+     */
     public function orderBy(string $column, string $direction = 'asc'): self
     {
         $this->orderBy[] = sprintf('%s %s', $column, $direction);

@@ -46,7 +46,7 @@ class DatabaseTest extends TestCase
         $db = Database::inMemory();
         $db->logQueries = true;
 
-        $result = $db->exec('select :arg as number [[where 1 = :two]]', ['arg' => 42, 'two' => 2]);
+        $result = $db->exec('select :arg as number [[where 1 = :two]][[ or 3 = :three]]', ['arg' => 42, 'two' => 2]);
 
         $this->assertEquals('select :arg as number where 1 = :two', $db->log[0]);
         $this->assertEmpty($result->all());

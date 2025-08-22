@@ -93,7 +93,7 @@ class Database
     private function renderFragments(string $sql, array $params): string
     {
         $fragments = preg_split(
-            '/\[\[(.+)\]\]/', 
+            '/\[\[(.+?)\]\]/', 
             $sql, 
             -1, 
             PREG_SPLIT_DELIM_CAPTURE
@@ -111,7 +111,7 @@ class Database
 
             foreach ($matched[1] ?? [] as $name) {
                 if (!isset($params[$name]) && !isset($params[':' . $name])) {
-                    continue;
+                    continue 2;
                 }
             }
 
